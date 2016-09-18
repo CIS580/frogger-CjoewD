@@ -128,13 +128,14 @@ function update(elapsedTime, ctx) {
 			if(player.getState() != "dead") {
 				switch(player.x){
 					case 64: //logs
+						if(player.y < -10 && player.getState() != "locked"){
+							lives--;
+							player.lock();
+						}
 						if(player.getState() != "locked") {
 							logCheck = false;
 							for(i = 0; i<4;i++){ 
-								if(player.y < -10){
-									player.lock();
-								}
-								if(player.y+54 > log[i].y && player.y < log[i].y + 50 && log[i].getState() == "float"){
+								if(player.y+54 > log[i].y && player.y < log[i].y + 50 && log[i].getState() != "sink"){
 									logCheck = true;
 								}
 							}
@@ -186,19 +187,20 @@ function update(elapsedTime, ctx) {
 						}
 						break;
 					case 640: //logs
+						if(player.y > 375 && player.getState() != "locked"){
+							lives--;
+							player.lock();
+						}
 						if(player.getState() != "locked") {
 							logCheck = false;
 							for(i = 4; i<8;i++){ 
-								if(player.y > 375){
-									player.lock();
-								}
-								if(player.y+54 > log[i].y && player.y < log[i].y + 50 && log[i].getState() == "float"){
+								if(player.y+54 > log[i].y && player.y < log[i].y + 50 && log[i].getState() != "sink"){
 									logCheck = true;
 								}
 							}
 							if(!logCheck){
 								player.kill();
-								lives++;
+								lives--;
 							}
 						}
 						player.y += log[0].getSpeed();

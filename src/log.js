@@ -69,19 +69,23 @@ Log.prototype.update = function (time) {
 			this.timer = 0;
 			switch(this.state){
 				case "float":
-					if(Math.floor(((Math.random() * 10000) + 1)) % 30 == 1) this.state = "sink";
+					if(Math.floor(((Math.random() * 10000) + 1)) % 30 == 1) {
+						this.state = "mid";
+						this.sinking = "down";
+					}
 					break;
 				case "mid":
 					if(this.sinking == "up"){
 						this.state = "float";
-						this.sinking == "down";
 					}
 					else {
 						this.state = "sink";
-						this.sinking == "up";
 					}
 				case "sink":
-					if(Math.floor(((Math.random() * 10000) + 1)) % 15 == 1) this.state = "mid";
+					if(Math.floor(((Math.random() * 10000) + 1)) % 15 == 1) {
+						this.state = "mid";
+						this.sinking = "up";
+					}
 			}
 		}
 }
