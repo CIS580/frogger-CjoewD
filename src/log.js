@@ -24,6 +24,7 @@ function Log(position) {
     this.image = Math.floor(((Math.random() * 10000) + 1)) % 4;
 	this.timer = 0;
 	this.state = "float";
+	this.sinking = "down";
 }
 
 Log.prototype.upSpeed = function(){
@@ -63,14 +64,26 @@ Log.prototype.update = function (time) {
             }
             break;
     }
-	this.timer += time;
-	if (this.timer > MS_PER_FRAME) {
-		this.timer = 0;
-		if(Math.floor(((Math.random() * 10000) + 1)) % 15 == 1){
-			if(this.state == "sink") this.state = "float";
-			else if(Math.floor(((Math.random() * 10000) + 1)) % 2 == 1) this.state = "sink";
+		this.timer += time;
+		if (this.timer > MS_PER_FRAME) {
+			this.timer = 0;
+			switch(this.state){
+				case "float":
+					if(Math.floor(((Math.random() * 10000) + 1)) % 30 == 1) this.state = "sink";
+					break;
+				case "mid":
+					if(this.sinking == "up"){
+						this.state = "float";
+						this.sinking == "down";
+					}
+					else {
+						this.state = "sink";
+						this.sinking == "up";
+					}
+				case "sink":
+					if(Math.floor(((Math.random() * 10000) + 1)) % 15 == 1) this.state = "mid";
+			}
 		}
-	}
 }
 
 /**
@@ -79,12 +92,26 @@ Log.prototype.update = function (time) {
  * {CanvasRenderingContext2D} ctx the context to render into
  */
 Log.prototype.render = function (time, ctx) {
-	if (this.state =="float") ctx.drawImage(
-			// image
-			this.spritesheet,
-			// source rectangle
-			0, 0, 64, 128,
-			// destination rectangle
-			this.x, this.y, this.width, this.height
-		);
+	switch(this.state){
+		case "float": 
+			ctx.drawImage(
+				// image
+				this.spritesheet,
+				// source rectangle
+				0, 0, 64, 128,
+				// destination rectangle
+				this.x, this.y, this.width, this.height
+			);
+			break;
+		case "mid":
+			ctx.drawImage(
+				// image
+				this.spritesheet,
+				// source rectangle
+				64, 0, 64, 128,
+				// destination rectangle
+				this.x, this.y, this.width, this.height
+			);
+			break;
+	}
 }
