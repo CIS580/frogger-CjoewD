@@ -673,6 +673,7 @@ function Player(position) {
 
   var self = this;
   window.onkeydown = function (event) {
+	  event.preventDefault();
       switch (event.keyCode) {
           case 38:
           case 87://up
